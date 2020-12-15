@@ -101,6 +101,7 @@ namespace Brickwork
         {
             var layerColumns = this.LayerService.GetLayerColumns();
             var layerRows = this.LayerService.GetLayerRows();
+            
             var layerTargetBrickCount = this.LayerService.GetLayerTargetBrickCount();
 
             this.WriteService.WriteLine(string.Format(GeneralConstants.EnterLayer, layerRows, layerColumns, GeneralConstants.MinBrickNumber, layerTargetBrickCount));
