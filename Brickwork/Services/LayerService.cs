@@ -7,6 +7,7 @@ namespace Brickwork.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Text.RegularExpressions;
 
     using Brickwork.Common.Constants;
@@ -107,7 +108,7 @@ namespace Brickwork.Services
         public bool AddLayerRow(string inputArgsStr)
         {
             var currentLayerWidth = this.Layer.State.Count;
-            if (currentLayerWidth == this.Layer.Y)
+            if (currentLayerWidth == this.Layer.X)
             {
                 throw new ArgumentOutOfRangeException(ErrMsg.LayerIsFull, new Exception());
             }
@@ -194,7 +195,10 @@ namespace Brickwork.Services
 
         private void ValidateRowPattern(string inputArgsStr)
         {
-            if (!Regex.IsMatch(inputArgsStr, RegXPattern.RowNumbers))
+            var maxNumber = this.GetLayerColumns();
+            var repeatStr = new StringBuilder(RegXPattern.RowNumbers.Length * maxNumber).Insert(0, RegXPattern.RowNumbers, maxNumber).ToString();
+            var pattern = $@"^[\W]*{repeatStr.ToString().Trim()}$";
+            if (!Regex.IsMatch(inputArgsStr, pattern))
             {
                 var errMsg = string.Format(ErrMsg.NotAllowedCharacterInLine, 1, this.Layer.TargetBricks);
                 throw new ArgumentException(errMsg);

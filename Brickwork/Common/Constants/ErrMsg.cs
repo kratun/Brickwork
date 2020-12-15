@@ -12,7 +12,7 @@ namespace Brickwork.Common.Constants
         /// <summary>
         /// Error: There are not allowed charecters in N-th line.
         /// </summary>
-        public const string NotAllowedCharacterInLine = "Error: There are not allowed charecters in line. You should write 4 numbers less between {0} and {1}";
+        public const string NotAllowedCharacterInLine = "Error: There are not allowed charecters in line. You should write {0} numbers less between {1} and {2}";
 
         /// <summary>
         /// Error: There are not allowed charecters in N-th line.

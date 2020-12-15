@@ -17,6 +17,6 @@ namespace Brickwork.Common.Validations
         /// <summary>
         /// AllowedDigitsInLayer is a constant string pattern for layer row input.
         /// </summary>
-        public const string RowNumbers = @"^[\W]*[0-9]{1,2}[\W]*[0-9]{1,2}[\W]*[0-9]{1,2}[\W]*[0-9]{1,2}[\W]*$";
+        public const string RowNumbers = @"[0-9]{1,2}[\W]*";
     }
 }
