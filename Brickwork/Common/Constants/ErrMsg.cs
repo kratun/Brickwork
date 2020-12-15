@@ -15,6 +15,21 @@ namespace Brickwork.Common.Constants
         public const string NotAllowedCharacterInLine = "Error: There are not allowed charecters in line. You should write 4 numbers less between {0} and {1}";
 
         /// <summary>
+        /// Error: There are not allowed charecters in N-th line.
+        /// </summary>
+        public const string OutOfRangeNumberInLine = "Error: Some of the entered numbers are out of range. Please write {0} numbers between {1} and {2}";
+
+        /// <summary>
+        /// Error: Brick part does not match.
+        /// </summary>
+        public const string BrickPartAboveMustMatch = "Error: Incorrect brick number {0} at position {1}. The number of this position must be {2}.";
+
+        /// <summary>
+        /// Error: Brick part does not match.
+        /// </summary>
+        public const string BrickPartMissMatch = "Error: Incorrect brick number {0} at position {1}. Please write correct one.";
+
+        /// <summary>
         /// Error: Please write width and height of the layer in pattern "width, height".
         /// </summary>
         public const string LayerDimentionException = "Error: Please write width and height of the layer in pattern \"width, height\"";
@@ -32,7 +47,7 @@ namespace Brickwork.Common.Constants
         /// <summary>
         /// Error: The line must contains digits equal to the Layer Width digits (1 for green or 0 for red) without space between.
         /// </summary>
-        public const string NotCorrectDigitsCount = "Error: The line {0} - \"{1}\" must contains {2} digits ({3} for green or {4} for red) without space between";
+        public const string NotCorrectDigitsCount = "Error: The line {0} - \"{1}\" must contains {2} numbers separated by space";
 
         /// <summary>
         /// Error: Layer is full. It is not possible to enter more rows.

@@ -34,6 +34,21 @@ namespace Brickwork.Services
         private ILayer Layer { get; set; }
 
         /// <summary>
+        /// Gets or sets all bricks.
+        /// </summary>
+        /// <inheritdoc cref="List{T}"/>
+        private List<IBrick> Bricks { get; set; }
+
+        /// <summary>
+        /// Get layer state.
+        /// </summary>
+        /// <returns>Return layer state.</returns>
+        public List<List<int>> GetLayerState()
+        {
+            return this.Layer.State;
+        }
+
+        /// <summary>
         /// Get layer X (width) and Y (height).
         /// </summary>
         /// <param name="inputArgsStr">A string contains two integers separated by space.</param>
@@ -79,6 +94,7 @@ namespace Brickwork.Services
         public void Reset()
         {
             this.Layer = new Layer();
+            this.Bricks = new List<IBrick>();
         }
 
         /// <summary>
@@ -96,14 +112,35 @@ namespace Brickwork.Services
                 throw new ArgumentOutOfRangeException(ErrMsg.LayerIsFull, new Exception());
             }
 
-            var errMsg = string.Empty;
+            // Validate input row
+            var rowNumbers = this.GetAllRowNumbers(inputArgsStr);
 
-            // Validate allowed digits in layer
-            if (!Regex.IsMatch(inputArgsStr, RegXPattern.RowNumbers))
+            this.AddBricksPart(rowNumbers);
+
+            return true;
+        }
+
+        private bool AddBricksPart(List<int> rowNumbers)
+        {
+            for (int i = 0; i < rowNumbers.Count; i++)
             {
-                errMsg = string.Format(ErrMsg.NotAllowedCharacterInLine, 1, this.Layer.TargetBricks);
-                throw new ArgumentException(errMsg);
+                var id = rowNumbers[i];
+                var brick = this.Bricks.FirstOrDefault(b => b.Id == id) != null ? this.Bricks.FirstOrDefault(b => b.Id == id) : new Brick();
+                var row = this.Layer.State.Count;
+                brick.Id = brick.Id != 0 ? brick.Id : id;
+                brick.AddPart(i, row);
+                this.Bricks.Add(brick);
             }
+
+            this.Layer.State.Add(rowNumbers);
+
+            return true;
+        }
+
+        private List<int> GetAllRowNumbers(string inputArgsStr)
+        {
+            // Validate written numbers in a row
+            this.ValidateRowPattern(inputArgsStr);
 
             var separators = new char[] { ' ' };
             var args = inputArgsStr
@@ -111,14 +148,69 @@ namespace Brickwork.Services
                     .Select(int.Parse)
                     .ToList();
 
-            // Validate row width
-            if (args.Count != this.Layer.Y)
+            // Validate row written numbers range
+            this.ValidateRowWrittenNumbersRange(args);
+
+            // Validate brick
+            this.ValidBricksPart(args);
+
+            return args;
+        }
+
+        private bool ValidBricksPart(List<int> args)
+        {
+            var lastEnteredRow = this.Layer.State.Count;
+
+            for (int i = 0; i < args.Count; i++)
             {
-                errMsg = string.Format(ErrMsg.NotCorrectDigitsCount, currentLayerWidth + 1, inputArgsStr, this.Layer.X, GeneralConstants.MinBrickNumber);
-                throw new ArgumentOutOfRangeException(errMsg, new Exception());
+                var checkId = args[i];
+
+                if (lastEnteredRow > 0)
+                {
+                    var aboveId = this.Layer.State[lastEnteredRow - 1][i];
+                    var aboveBrick = this.Bricks.FirstOrDefault(b => b.Id == aboveId);
+                    if (aboveBrick.Parts.Count < GeneralConstants.MaxBrickParts && checkId != aboveId)
+                    {
+                        var errMsg = string.Format(ErrMsg.BrickPartAboveMustMatch, args[i], i, aboveId);
+                        throw new ArgumentException(errMsg);
+                    }
+                }
+
+                var brick = this.Bricks.FirstOrDefault(b => b.Id == checkId);
+                if (brick != null)
+                {
+                    var isCorrectPart = brick.IsCorrectPart(lastEnteredRow, i);
+
+                    if (!isCorrectPart)
+                    {
+                        var errMsg = string.Format(ErrMsg.BrickPartMissMatch, args[i], i);
+                        throw new ArgumentException(errMsg);
+                    }
+                }
             }
 
-            this.Layer.State.Add(args);
+            return true;
+        }
+
+        private void ValidateRowPattern(string inputArgsStr)
+        {
+            if (!Regex.IsMatch(inputArgsStr, RegXPattern.RowNumbers))
+            {
+                var errMsg = string.Format(ErrMsg.NotAllowedCharacterInLine, 1, this.Layer.TargetBricks);
+                throw new ArgumentException(errMsg);
+            }
+        }
+
+        private bool ValidateRowWrittenNumbersRange(List<int> args)
+        {
+            var maxBrickNumber = this.GetLayerTargetBrickCount();
+            var isAnyOutOfRange = args.Any(element => element < GeneralConstants.MinBrickNumber || element > maxBrickNumber);
+
+            if (isAnyOutOfRange)
+            {
+                var errMsg = string.Format(ErrMsg.OutOfRangeNumberInLine, this.GetLayerColumns(), GeneralConstants.MinBrickNumber, this.GetLayerTargetBrickCount());
+                throw new ArgumentOutOfRangeException(errMsg);
+            }
 
             return true;
         }

@@ -75,6 +75,8 @@ namespace Brickwork
                     {
                         return;
                     }
+
+                    this.WriteResult();
                 }
                 catch (Exception e)
                 {
@@ -97,11 +99,21 @@ namespace Brickwork
             }
         }
 
+        private void WriteResult()
+        {
+            var layerState = this.LayerService.GetLayerState();
+
+            for (int i = 0; i < layerState.Count; i++)
+            {
+                this.WriteService.WriteLine(string.Join(", ", layerState[i]));
+            }
+        }
+
         private string CreateLayer()
         {
             var layerColumns = this.LayerService.GetLayerColumns();
             var layerRows = this.LayerService.GetLayerRows();
-            
+
             var layerTargetBrickCount = this.LayerService.GetLayerTargetBrickCount();
 
             this.WriteService.WriteLine(string.Format(GeneralConstants.EnterLayer, layerRows, layerColumns, GeneralConstants.MinBrickNumber, layerTargetBrickCount));

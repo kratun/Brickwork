@@ -24,7 +24,7 @@ namespace Brickwork.Common.Constants
         /// <summary>
         /// EnterLayer is an string for message: "Please enter on each next {X-th} lines, {Y-th} digits({GreenNumber} for green or {RedNumber} for red)".
         /// </summary>
-        public const string EnterLayer = "Please enter on the next {0} lines, {1} numbers between {2} and {3}";
+        public const string EnterLayer = "Please enter on the next {0} lines, {1} brick. Each brick has two equal numbers. Possible numbers between {2} and {3}";
 
         /// <summary>
         /// EnterLayerRow is an string for message: "Enter line currentLine}: ".
@@ -42,9 +42,14 @@ namespace Brickwork.Common.Constants
         public const int MinLayerSize = 2;
 
         /// <summary>
-        /// MinLayerSize is an integer and hold constant for maximum size of the layer.
+        /// MaxLayerSize is an integer and hold constant for maximum size of the layer.
         /// </summary>
         public const int MaxLayerSize = 100;
+
+        /// <summary>
+        /// MaxBrickParts is an integer and hold constant for maximum brick parts.
+        /// </summary>
+        public const int MaxBrickParts = 2;
 
         /// <summary>
         /// EnterTargetConditions is a constant string for message: "All inputs are correct.".

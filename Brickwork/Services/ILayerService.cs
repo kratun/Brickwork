@@ -20,7 +20,7 @@ namespace Brickwork.Services
         /// <exception cref="ArgumentException">Thrown when line
         /// contains not allowed character or not enougth parameters.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when X (width) or Y (heght) are out of game range.</exception>
-        public void GetLayerDimensions(string inputArgsStr);
+        void GetLayerDimensions(string inputArgsStr);
 
         /// <summary>
         /// Gets layer columns (width).
@@ -53,5 +53,11 @@ namespace Brickwork.Services
         /// <exception cref="ArgumentException">Throw when input contains not allowed charakters.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Throw when the row constains less/more characters or the layer is full.</exception>
         bool AddLayerRow(string inputArgsStr);
+
+        /// <summary>
+        /// Get layer state.
+        /// </summary>
+        /// <returns>Return layer state.</returns>
+        List<List<int>> GetLayerState();
     }
 }
