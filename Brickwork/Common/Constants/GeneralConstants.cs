@@ -57,6 +57,11 @@ namespace Brickwork.Common.Constants
         public const int MinBrickParts = 1;
 
         /// <summary>
+        /// SurroundedBrickBorderLength is an integer and hold constant for brick part border length.
+        /// </summary>
+        public const int SurroundedBrickBorderLength = 3;
+
+        /// <summary>
         /// EnterTargetConditions is a constant string for message: "All inputs are correct.".
         /// </summary>
         public const string CorrectArgsStr = "All inputs are correct.";
@@ -102,6 +107,21 @@ namespace Brickwork.Common.Constants
         /// End is a constant string to canceling game.
         /// </summary>
         public const string EndGame = "end";
+
+        /// <summary>
+        /// NoSolutionExist is a constant string if there is no way to build stable layer.
+        /// </summary>
+        public const string NoSolutionExist = "-1 \nNo solution exist!";
+
+        /// <summary>
+        /// DrawSymbol is a constant string using to separate bricks.
+        /// </summary>
+        public const string DrawSymbol = "*";
+
+        /// <summary>
+        /// BrickBetweenPartsSymbol is a constant string using to separate brick part.
+        /// </summary>
+        public const string BrickBetweenPartsSymbol = " ";
 
         /// <summary>
         /// Repeat is a constant string if you want tot start game again.

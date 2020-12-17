@@ -134,13 +134,75 @@ namespace Brickwork.Services
             var tmpLayer = new Layer(lRow, lCol, state);
             lRow--;
             lCol--;
-            var canBuildLayer = Func(this.Layer, lRow, lCol, tmpLayer, lRow, lCol);
+            var builtLayer = Func(this.Layer, lRow, lCol, tmpLayer, lRow, lCol);
 
-            var nextState = canBuildLayer.State;
+            var hasEmptySlot= builtLayer.State.Any(row => row.Any(col => col == 0));
+            var finalState = builtLayer.State;
+            var result = this.ConvertLayerStateToString(finalState);
 
-            var result = canBuildLayer.State.Any(row => row.Any(col => col == 0));
+            return hasEmptySlot ? GeneralConstants.NoSolutionExist : result;
+        }
 
-            return result ? "-1" : "Ok";
+        private string ConvertLayerStateToString(List<List<int>> state)
+        {
+            var lRow = (this.GetLayerRows() * 2) + 1;
+            var lCol = (this.GetLayerColumns() * 2) + 1;
+            var finalState = Enumerable.Range(0, lRow).Select(i => new string[lCol].ToList()).ToList();
+
+            var fillFinalState = this.FillFinalState(state, finalState);
+
+            var result = string.Join(Environment.NewLine, fillFinalState.Select(line => string.Join(string.Empty, line)));
+            return result;
+        }
+
+        private List<List<string>> FillFinalState(List<List<int>> state, List<List<string>> finalState)
+        {
+            var maxRow = state.Count;
+            var maxCol = state[0].Count;
+
+            for (int i = 0; i < maxRow; i++)
+            {
+                for (int k = 0; k < maxCol; k++)
+                {
+                    this.FillSurroundedArea(state, finalState, i, k, maxRow - 1, maxCol - 1);
+                }
+            }
+
+            return finalState;
+        }
+
+        private void FillSurroundedArea(List<List<int>> state, List<List<string>> finalState, int i, int k, int maxRow, int maxCol)
+        {
+            var fRow = i * 2;
+            var fCol = k * 2;
+            var endRow = fRow + GeneralConstants.SurroundedBrickBorderLength;
+            var endCol = fCol + GeneralConstants.SurroundedBrickBorderLength;
+
+            for (int row = fRow; row < endRow; row++)
+            {
+                for (int col = fCol; col < endCol; col++)
+                {
+                    if (row == fRow + 1 && col == fCol + 1)
+                    {
+                        finalState[row][col] = state[i][k].ToString();
+                        continue;
+                    }
+
+                    var isPartLeft = k < maxCol && state[i][k] == state[i][k + 1] && (col == fCol + 2 && row == fRow + 1);
+                    var isPartRight = k > 0 && state[i][k] == state[i][k - 1] && (col == fCol && row == fRow + 1);
+                    var isPartUp = i < maxRow && state[i][k] == state[i + 1][k] && (row == fRow + 2 && col == fCol + 1);
+                    var isPartUnder = i > 0 && state[i][k] == state[i - 1][k] && (row == fRow && col == fCol + 1);
+
+                    if (!isPartLeft && !isPartRight && !isPartUp && !isPartUnder)
+                    {
+                        finalState[row][col] = GeneralConstants.DrawSymbol;
+                    }
+                    else
+                    {
+                        finalState[row][col] = GeneralConstants.BrickBetweenPartsSymbol;
+                    }
+                }
+            }
         }
 
         private static ILayer Func(ILayer layer, int lRow, int lCol, ILayer tmpLayer, int tmpRow, int tmpCol)
@@ -169,45 +231,12 @@ namespace Brickwork.Services
 
         private static ILayer FindPossiblePosition(ILayer layer, int lRow, int lCol, ILayer tmpLayer, int tmpRow, int tmpCol)
         {
-            var maxRow = layer.State.Count;
-            var maxCol = layer.State[0].Count;
-
             // Check if the build layer possition is free
             if (tmpLayer.State[tmpRow][tmpCol] != 0)
             {
                 var previousCol = tmpCol - 1;
                 return Func(layer, lRow, lCol, tmpLayer, tmpRow, previousCol);
             }
-
-            // TODO Check Step for lRow and lCol
-
-            //// Maybe it is not possible
-            //// Check under is Empty or Exist
-            //var isUnder = lRow + 1 < maxRow
-            //    && layer.State[lRow][lCol] != layer.State[lRow + 1][lCol]
-            //    && tmpRow + 1 < maxRow
-            //    && tmpLayer.State[tmpRow + 1][tmpCol] == 0;
-
-            //if (isUnder)
-            //{
-            //    tmpLayer.State[tmpRow + 1][tmpCol] = layer.State[lRow][lCol];
-            //    tmpLayer.State[tmpRow][tmpCol] = layer.State[lRow][lCol];
-
-            //    return Func(layer, lRow, --lCol, tmpLayer, tmpRow, --tmpCol);
-            //}
-
-            //// Maybe it is not possible
-            //// Check right is Empty or Exist
-            //var isRight = lCol + 1 < maxCol
-            //    && layer.State[lRow][lCol] != layer.State[lRow][lCol + 1]
-            //    && tmpCol + 1 < maxCol
-            //    && tmpLayer.State[tmpRow][tmpCol + 1] == 0;
-            //if (isRight)
-            //{
-            //    tmpLayer.State[tmpRow][tmpCol + 1] = layer.State[lRow][lCol];
-            //    tmpLayer.State[tmpRow][tmpCol] = layer.State[lRow][lCol];
-            //    return Func(layer, lRow, lCol, tmpLayer, --tmpRow, --tmpCol);
-            //}
 
             // Check left is Empty or Exist
             var isLeft = tmpCol > 0
@@ -217,9 +246,11 @@ namespace Brickwork.Services
             {
                 tmpLayer.State[tmpRow][tmpCol - 1] = layer.State[lRow][lCol];
                 tmpLayer.State[tmpRow][tmpCol] = layer.State[lRow][lCol];
-                var steps = GetLayerSteps(layer, lRow, lCol);
 
-                return Func(layer, lRow, lCol - steps, tmpLayer, tmpRow, tmpCol - GeneralConstants.MaxBrickParts);
+                var stepsRow = GetLayerRowSteps(layer, lRow, lCol);
+                var stepsCol = GetLayerColumnSteps(layer, lRow, lCol);
+
+                return Func(layer, lRow, lCol - stepsRow, tmpLayer, tmpRow, tmpCol - stepsCol);
             }
 
             // Check up is Empty or Exist
@@ -232,18 +263,30 @@ namespace Brickwork.Services
                 tmpLayer.State[tmpRow - 1][tmpCol] = layer.State[lRow][lCol];
                 tmpLayer.State[tmpRow][tmpCol] = layer.State[lRow][lCol];
 
-                var steps = GetLayerSteps(layer, lRow, lCol);
+                var stepsRow = GetLayerRowSteps(layer, lRow, lCol);
+                var stepsCol = GetLayerColumnSteps(layer, lRow, lCol);
 
-                return Func(layer, lRow, lCol - steps, tmpLayer, tmpRow, tmpCol - GeneralConstants.MinBrickParts);
+                return Func(layer, lRow, lCol - stepsRow, tmpLayer, tmpRow, tmpCol - stepsCol);
             }
 
             return Func(layer, lRow, lCol - GeneralConstants.MaxBrickParts, tmpLayer, tmpRow, tmpCol - GeneralConstants.MaxBrickParts);
         }
 
-        private static int GetLayerSteps(ILayer layer, int lRow, int lCol)
+        private static int GetLayerRowSteps(ILayer layer, int lRow, int lCol)
         {
             var steps = GeneralConstants.MinBrickParts;
             if (lCol > 0 && layer.State[lRow][lCol] == layer.State[lRow][lCol - 1])
+            {
+                steps++;
+            }
+
+            return steps;
+        }
+
+        private static int GetLayerColumnSteps(ILayer layer, int lRow, int lCol)
+        {
+            var steps = GeneralConstants.MinBrickParts;
+            if (lRow > 0 && layer.State[lRow][lCol] == layer.State[lRow -1][lCol])
             {
                 steps++;
             }
