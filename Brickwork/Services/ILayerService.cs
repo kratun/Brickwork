@@ -59,5 +59,11 @@ namespace Brickwork.Services
         /// </summary>
         /// <returns>Return layer state.</returns>
         List<List<int>> GetLayerState();
+
+        /// <summary>
+        /// Build layer if possible.
+        /// </summary>
+        /// <returns> The built layer result.</returns>
+        string BuildLayer();
     }
 }

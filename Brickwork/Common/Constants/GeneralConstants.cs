@@ -52,6 +52,11 @@ namespace Brickwork.Common.Constants
         public const int MaxBrickParts = 2;
 
         /// <summary>
+        /// MinBrickParts is an integer and hold constant for miniimum brick parts.
+        /// </summary>
+        public const int MinBrickParts = 1;
+
+        /// <summary>
         /// EnterTargetConditions is a constant string for message: "All inputs are correct.".
         /// </summary>
         public const string CorrectArgsStr = "All inputs are correct.";
@@ -66,7 +71,7 @@ namespace Brickwork.Common.Constants
         /// <summary>
         /// WaitCalculations is a constant string for message: "Please wait calculations!".
         /// </summary>
-        public const string WaitCalculations = "Please wait layer is under construction!";
+        public const string WaitCalculations = "Please wait. Layer is under construction!";
 
         /// <summary>
         /// WantToProceedStr is a constant string for message: "Do you want to proceed? (Yes/No)".

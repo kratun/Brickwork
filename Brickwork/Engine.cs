@@ -76,12 +76,15 @@ namespace Brickwork
                         return;
                     }
 
-                    this.WriteResult();
+                    result = this.BuildLayer();
+
+                    this.WriteResult(result);
                 }
                 catch (Exception e)
                 {
                     if ((e is ArgumentException) || (e is ArgumentOutOfRangeException))
                     {
+                        Console.WriteLine(e);
                         continue;
                     }
 
@@ -99,14 +102,24 @@ namespace Brickwork
             }
         }
 
-        private void WriteResult()
+        private string BuildLayer()
         {
-            var layerState = this.LayerService.GetLayerState();
+            this.WriteService.WriteLine(string.Format(GeneralConstants.WaitCalculations));
 
-            for (int i = 0; i < layerState.Count; i++)
-            {
-                this.WriteService.WriteLine(string.Join(", ", layerState[i]));
-            }
+            var result = this.LayerService.BuildLayer();
+
+            return result;
+        }
+
+        private void WriteResult(string result)
+        {
+            this.WriteService.WriteLine(result);
+            //var layerState = this.LayerService.GetLayerState();
+
+            //for (int i = 0; i < layerState.Count; i++)
+            //{
+            //    this.WriteService.WriteLine(string.Join(", ", layerState[i]));
+            //}
         }
 
         private string CreateLayer()
@@ -116,7 +129,7 @@ namespace Brickwork
 
             var layerTargetBrickCount = this.LayerService.GetLayerTargetBrickCount();
 
-            this.WriteService.WriteLine(string.Format(GeneralConstants.EnterLayer, layerRows, layerColumns, GeneralConstants.MinBrickNumber, layerTargetBrickCount));
+            this.WriteService.WriteLine(string.Format(GeneralConstants.EnterLayer, layerRows, layerColumns, GeneralConstants.MinBrickParts, layerTargetBrickCount));
 
             for (int i = 0; i < layerRows; i++)
             {
