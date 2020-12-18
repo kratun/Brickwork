@@ -114,12 +114,6 @@ namespace Brickwork
         private void WriteResult(string result)
         {
             this.WriteService.WriteLine(result);
-            //var layerState = this.LayerService.GetLayerState();
-
-            //for (int i = 0; i < layerState.Count; i++)
-            //{
-            //    this.WriteService.WriteLine(string.Join(", ", layerState[i]));
-            //}
         }
 
         private string CreateLayer()
@@ -198,7 +192,6 @@ namespace Brickwork
                     if (e is ArgumentException)
                     {
                         this.WriteService.WriteLine(e.Message);
-                        throw e;
                     }
                     else
                     {

@@ -130,13 +130,10 @@ namespace Brickwork.Services
         {
             var lRow = this.GetLayerRows();
             var lCol = this.GetLayerColumns();
-            var state = Enumerable.Range(0, lRow).Select(i => new int[lCol].ToList()).ToList();
-            var tmpLayer = new Layer(lRow, lCol, state);
-            lRow--;
-            lCol--;
-            var builtLayer = Func(this.Layer, lRow, lCol, tmpLayer, lRow, lCol);
 
-            var hasEmptySlot= builtLayer.State.Any(row => row.Any(col => col == 0));
+            var builtLayer = BuildNextLayer.Run(this.Layer);
+
+            var hasEmptySlot = builtLayer.State.Any(row => row.Any(col => col == 0));
             var finalState = builtLayer.State;
             var result = this.ConvertLayerStateToString(finalState);
 
@@ -203,95 +200,6 @@ namespace Brickwork.Services
                     }
                 }
             }
-        }
-
-        private static ILayer Func(ILayer layer, int lRow, int lCol, ILayer tmpLayer, int tmpRow, int tmpCol)
-        {
-            if (lRow < 0 || tmpRow < 0)
-            {
-                return tmpLayer;
-            }
-
-            if (lCol < 0)
-            {
-                lCol = layer.State[0].Count - 1;
-                var previousRow = lRow - 1;
-                return Func(layer, previousRow, lCol, tmpLayer, tmpRow, tmpCol);
-            }
-
-            if (tmpCol < 0)
-            {
-                tmpCol = tmpLayer.State[0].Count - 1;
-                var previousRow = tmpRow - 1;
-                return Func(layer, lRow, lCol, tmpLayer, previousRow, tmpCol);
-            }
-
-            return FindPossiblePosition(layer, lRow, lCol, tmpLayer, tmpRow, tmpCol);
-        }
-
-        private static ILayer FindPossiblePosition(ILayer layer, int lRow, int lCol, ILayer tmpLayer, int tmpRow, int tmpCol)
-        {
-            // Check if the build layer possition is free
-            if (tmpLayer.State[tmpRow][tmpCol] != 0)
-            {
-                var previousCol = tmpCol - 1;
-                return Func(layer, lRow, lCol, tmpLayer, tmpRow, previousCol);
-            }
-
-            // Check left is Empty or Exist
-            var isLeft = tmpCol > 0
-                && layer.State[tmpRow][tmpCol] != layer.State[tmpRow][tmpCol - 1]
-                && tmpLayer.State[tmpRow][tmpCol - 1] == 0;
-            if (isLeft)
-            {
-                tmpLayer.State[tmpRow][tmpCol - 1] = layer.State[lRow][lCol];
-                tmpLayer.State[tmpRow][tmpCol] = layer.State[lRow][lCol];
-
-                var stepsRow = GetLayerRowSteps(layer, lRow, lCol);
-                var stepsCol = GetLayerColumnSteps(layer, lRow, lCol);
-
-                return Func(layer, lRow, lCol - stepsRow, tmpLayer, tmpRow, tmpCol - stepsCol);
-            }
-
-            // Check up is Empty or Exist
-            var isUp = tmpRow > 0
-                && layer.State[tmpRow][tmpCol] != layer.State[tmpRow - 1][tmpCol]
-                && tmpLayer.State[tmpRow - 1][tmpCol] == 0;
-
-            if (isUp)
-            {
-                tmpLayer.State[tmpRow - 1][tmpCol] = layer.State[lRow][lCol];
-                tmpLayer.State[tmpRow][tmpCol] = layer.State[lRow][lCol];
-
-                var stepsRow = GetLayerRowSteps(layer, lRow, lCol);
-                var stepsCol = GetLayerColumnSteps(layer, lRow, lCol);
-
-                return Func(layer, lRow, lCol - stepsRow, tmpLayer, tmpRow, tmpCol - stepsCol);
-            }
-
-            return Func(layer, lRow, lCol - GeneralConstants.MaxBrickParts, tmpLayer, tmpRow, tmpCol - GeneralConstants.MaxBrickParts);
-        }
-
-        private static int GetLayerRowSteps(ILayer layer, int lRow, int lCol)
-        {
-            var steps = GeneralConstants.MinBrickParts;
-            if (lCol > 0 && layer.State[lRow][lCol] == layer.State[lRow][lCol - 1])
-            {
-                steps++;
-            }
-
-            return steps;
-        }
-
-        private static int GetLayerColumnSteps(ILayer layer, int lRow, int lCol)
-        {
-            var steps = GeneralConstants.MinBrickParts;
-            if (lRow > 0 && layer.State[lRow][lCol] == layer.State[lRow -1][lCol])
-            {
-                steps++;
-            }
-
-            return steps;
         }
 
         private bool AddBricksPart(List<int> rowNumbers)
@@ -373,7 +281,7 @@ namespace Brickwork.Services
             var pattern = $@"^[\W]*{repeatStr.ToString().Trim()}$";
             if (!Regex.IsMatch(inputArgsStr, pattern))
             {
-                var errMsg = string.Format(ErrMsg.NotAllowedCharacterInLine, 1, this.Layer.TargetBricks);
+                var errMsg = string.Format(ErrMsg.NotAllowedCharacterInLine, this.Layer.TargetBricks, 1, this.Layer.TargetBricks);
                 throw new ArgumentException(errMsg);
             }
         }
