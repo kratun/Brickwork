@@ -13,10 +13,10 @@ When the project is loaded press F5 button (if you use Visual Studio v 16.8.3) f
 ## Description
 1. In an effort to make the brickwork really strong we create this app in a way that no brick in it lies on a brick from the previous layer. Each brick has two parts marked with two equal numbers written in the squares of the area that are covered by this brick. All bricks are marked with whole numbers ranging from 1 to the total number of the bricks.</br>
 2. On the frist line you should write dimensions of the layer - rows(width) and columns(height). They must be even numbers not exceeding 100. If one or both are out range you will receive an error message. If one or both are not an integer or missing you will receive an error message also. After each error message you have to write the dimensions again.
-3. After writing a valid dimensions you will receive a message to write and on the next Nth rows you have to write brick mark on its possition on the layer. If you write less/more brick marked parts than row size or there are not allow mark number, or not valid brick you will receive an error message. After that each error message you have to write row again.</br>
-5. Atfer writing the Nth correct row you will receive the result of brickwork. If it no possible to create strong brickwork you will receive a message 
+3. After writing a valid dimensions you will receive a message to write on the next Nth lines all bricks mark on its correct possition. If you write less/more brick marked parts than row size or there are not allow mark number, or not valid brick you will receive an error message. After that each error message you have to write row again.</br>
+5. Atfer writing the Nth correct row you will receive the result of brickwork. If it no possible to create strong brickwork you will receive a message:</br> 
 	"-1  
-	No solution exist!"
+	No solution exist!"</br>
 	If there is a solution you will see the next layer where each brick is surrounded by asterisk or dash.
 	
 	
