@@ -11,6 +11,7 @@ namespace Brickwork.Services
     using System.Text.RegularExpressions;
 
     using Brickwork.Common.Constants;
+    using Brickwork.Common.Layer;
     using Brickwork.Common.Validations;
     using Brickwork.Models;
 
