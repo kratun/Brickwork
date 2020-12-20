@@ -132,10 +132,10 @@ namespace Brickwork.Services
             var lRow = this.GetLayerRows();
             var lCol = this.GetLayerColumns();
 
-            var builtLayer = BuildNextLayer.Run(this.Layer);
+            var builtLayerState = BuildNextLayerState.Run(this.Layer.State, lRow, lCol);
 
-            var hasEmptySlot = builtLayer.State.Any(row => row.Any(col => col == 0));
-            var finalState = builtLayer.State;
+            var hasEmptySlot = builtLayerState.Any(row => row.Any(col => col == 0));
+            var finalState = builtLayerState;
             var result = this.ConvertLayerStateToString(finalState);
 
             return hasEmptySlot ? GeneralConstants.NoSolutionExist : result;
