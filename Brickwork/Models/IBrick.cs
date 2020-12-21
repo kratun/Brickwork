@@ -29,13 +29,5 @@ namespace Brickwork.Models
         /// <param name="y">Part Point Y.</param>
         /// <returns>True for added part.</returns>
         bool AddPart(int x, int y);
-
-        /// <summary>
-        /// Check is a correct brick part.
-        /// </summary>
-        /// <param name="x">Part Point X.</param>
-        /// <param name="y">Part Point Y.</param>
-        /// <returns>True for added part.</returns>
-        bool IsCorrectPart(int x, int y);
     }
 }

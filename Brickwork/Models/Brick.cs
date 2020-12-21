@@ -38,36 +38,8 @@ namespace Brickwork.Models
         /// <returns>True for added part.</returns>
         public bool AddPart(int x, int y)
         {
-            this.IsCorrectPart(x, y);
-
             var part = new Point(x, y);
             this.Parts.Add(part);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Check is a correct brick part.
-        /// </summary>
-        /// <param name="x">Part Point X.</param>
-        /// <param name="y">Part Point Y.</param>
-        /// <returns>True for added part.</returns>
-        public bool IsCorrectPart(int x, int y)
-        {
-            if (this.Parts.Count == 2)
-            {
-                return false;
-            }
-
-            if (this.Parts.Count > 0)
-            {
-                var existingPoint = this.Parts[0];
-
-                if ((existingPoint.Y == y && existingPoint.X + 1 != x) || (existingPoint.X == x && existingPoint.Y + 1 != y))
-                {
-                    return false;
-                }
-            }
 
             return true;
         }
