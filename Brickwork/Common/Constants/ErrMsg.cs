@@ -57,7 +57,7 @@ namespace Brickwork.Common.Constants
         /// <summary>
         /// Error: Width must be an integer between MIN and MAX and can not be greater then height - "width, height".
         /// </summary>
-        public const string NotCorrectRow = "Error: Rows must be a whole even positive number less than {0} - \"rows columns\"";
+        public const string NotCorrectRow = "Error: Entered numbers must be a whole even positive number less than {0} - \"rows columns\"";
 
         /// <summary>
         /// Error: Height must be an integer between MIN and MAX.

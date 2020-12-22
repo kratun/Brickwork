@@ -52,13 +52,15 @@ namespace Brickwork.Services
         /// Get layer X (width) and Y (height).
         /// </summary>
         /// <param name="inputArgsStr">A string contains two integers separated by space.</param>
+        /// <returns>True if correct.</returns>
         /// <exception cref="ArgumentException">Thrown when line
         /// contains not allowed character or not enougth parameters.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when X (width) or Y (heght) are out of game range.</exception>
-        public void GetLayerDimensions(string inputArgsStr)
+        public bool GetLayerDimensions(string inputArgsStr)
         {
             var result = this.TryGetPoint(inputArgsStr);
             this.Layer = new Layer(result.X, result.Y);
+            return true;
         }
 
         /// <summary>

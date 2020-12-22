@@ -15,10 +15,8 @@ namespace Brickwork.Services
         /// Get layer X (width) and Y (height).
         /// </summary>
         /// <param name="inputArgsStr">A string contains two integers separated by space.</param>
-        /// <exception cref="ArgumentException">Thrown when line
-        /// contains not allowed character or not enougth parameters.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when X (width) or Y (heght) are out of game range.</exception>
-        void GetLayerDimensions(string inputArgsStr);
+        /// <returns>True if correct.</returns>
+        bool GetLayerDimensions(string inputArgsStr);
 
         /// <summary>
         /// Gets layer columns (width).
