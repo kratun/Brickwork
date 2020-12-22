@@ -10,7 +10,13 @@ namespace Brickwork.Models
     /// <inheritdoc cref="IPoint"/>
     public class Point : IPoint
     {
+        /// <summary>
+        /// Readonly property for point x.
+        /// </summary>
         private readonly int x;
+        /// <summary>
+        /// Readonly property for point y.
+        /// </summary>
         private readonly int y;
 
         /// <summary>

@@ -5,8 +5,6 @@
 namespace Brickwork
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using Brickwork.Common.Constants;
     using Brickwork.Services;
@@ -102,6 +100,10 @@ namespace Brickwork
             }
         }
 
+        /// <summary>
+        /// Method that build layer.
+        /// </summary>
+        /// <returns>Built layer as string.</returns>
         private string BuildLayer()
         {
             this.WriteService.WriteLine(string.Format(GeneralConstants.WaitCalculations));
@@ -111,11 +113,19 @@ namespace Brickwork
             return result;
         }
 
+        /// <summary>
+        /// Method that write result.
+        /// </summary>
+        /// <param name="result">A string to be written.</param>
         private void WriteResult(string result)
         {
             this.WriteService.WriteLine(result);
         }
 
+        /// <summary>
+        /// Method that create a layer.
+        /// </summary>
+        /// <returns>Return command as string.</returns>
         private string CreateLayer()
         {
             var layerColumns = this.LayerService.GetLayerColumns();
@@ -162,6 +172,10 @@ namespace Brickwork
             return string.Empty;
         }
 
+        /// <summary>
+        /// Method that get layer dimensions.
+        /// </summary>
+        /// <returns>Return command as string.</returns>
         private string TryGetLayerDeimensions()
         {
             while (true)

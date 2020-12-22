@@ -9,6 +9,7 @@ namespace Brickwork.Common.Validations
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
+
     using Brickwork.Common.Constants;
     using Brickwork.Models;
 

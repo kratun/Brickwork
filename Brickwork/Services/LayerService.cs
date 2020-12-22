@@ -7,8 +7,6 @@ namespace Brickwork.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Text.RegularExpressions;
 
     using Brickwork.Common.Constants;
     using Brickwork.Common.Layer;
@@ -125,7 +123,7 @@ namespace Brickwork.Services
         /// <summary>
         /// Build layer from input.
         /// </summary>
-        /// <returns>True if layer row is added.</returns>
+        /// <returns>Return built layer as string.</returns>
         /// <exception cref="ArgumentException">Throw when can not build the layer.</exception>
         public string BuildLayer()
         {
@@ -141,22 +139,31 @@ namespace Brickwork.Services
             return hasEmptySlot ? GeneralConstants.NoSolutionExist : result;
         }
 
+        /// <summary>
+        /// Convert layer state to a string.
+        /// </summary>
+        /// <param name="state"> State that hold list of interegrs.</param>
+        /// <returns>Returns a single string.</returns>
         private string ConvertLayerStateToString(List<List<int>> state)
         {
-            var lRow = (this.GetLayerRows() * 2) + 1;
-            var lCol = (this.GetLayerColumns() * 2) + 1;
-            var finalState = Enumerable.Range(0, lRow).Select(i => new string[lCol].ToList()).ToList();
-
-            var fillFinalState = this.FillFinalState(state, finalState);
+            var fillFinalState = this.FillFinalState(state);
 
             var result = string.Join(Environment.NewLine, fillFinalState.Select(line => string.Join(string.Empty, line)));
             return result;
         }
 
-        private List<List<string>> FillFinalState(List<List<int>> state, List<List<string>> finalState)
+        /// <summary>
+        /// Create final layer state.
+        /// </summary>
+        /// <param name="state"> State that hold list of interegrs.</param>
+        /// <returns>Return Lists of strings.</returns>
+        private List<List<string>> FillFinalState(List<List<int>> state)
         {
             var maxRow = state.Count;
             var maxCol = state[0].Count;
+            var lRow = (this.GetLayerRows() * 2) + 1;
+            var lCol = (this.GetLayerColumns() * 2) + 1;
+            var finalState = Enumerable.Range(0, lRow).Select(i => new string[lCol].ToList()).ToList();
 
             for (int i = 0; i < maxRow; i++)
             {

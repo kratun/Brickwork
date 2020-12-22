@@ -6,8 +6,8 @@ namespace Brickwork.Common.Layer
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using Brickwork.Common.Constants;
-    using Brickwork.Models;
     using Brickwork.Services;
 
     /// <summary>

@@ -6,8 +6,6 @@ namespace Brickwork.Services
 {
     using System.Collections.Generic;
 
-    using Brickwork.Models;
-
     /// <summary>
     /// Provides methods that create and recalculate layer N times.
     /// </summary>
