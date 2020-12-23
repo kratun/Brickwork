@@ -45,11 +45,7 @@ namespace Brickwork.Common.Validations
                         var aboveId = state[lastEnteredRow - 1][i];
                         var aboveBrick = tmpBricks.FirstOrDefault(br => br.Id == aboveId);
 
-                        errMsg = aboveBrick.IsCorrectPart(checkId, lastEnteredRow, i);
-                        if (errMsg != null)
-                        {
-                            throw new ArgumentException(errMsg);
-                        }
+                        aboveBrick.IsCorrectPart(checkId, lastEnteredRow, i);
                     }
 
                     existingBrick = new Brick();
@@ -59,11 +55,7 @@ namespace Brickwork.Common.Validations
                 }
                 else
                 {
-                    errMsg = existingBrick.IsCorrectPart(checkId, lastEnteredRow, i);
-                    if (errMsg != null)
-                    {
-                        throw new ArgumentException(errMsg);
-                    }
+                    existingBrick.IsCorrectPart(checkId, lastEnteredRow, i);
                 }
             }
 
@@ -163,12 +155,14 @@ namespace Brickwork.Common.Validations
         /// </summary>
         /// <param name="x">Part Point X.</param>
         /// <param name="y">Part Point Y.</param>
-        /// <returns>Returns error or empty string is id correct.</returns>
-        private static string IsCorrectPart(this IBrick checkedBrick, int id, int x, int y)
+        /// <returns>True if it is correct part.</returns>
+        /// <exception cref="ArgumentException">Thrown exception if new part is not correct.</exception>
+        private static bool IsCorrectPart(this IBrick checkedBrick, int id, int x, int y)
         {
             if (checkedBrick.Parts.Count >= GeneralConstants.MaxBrickParts && checkedBrick.Id == id)
             {
-                return string.Format(ErrMsg.BrickWithThatIdHasAllParts, y, checkedBrick.Id);
+                var errMsg = string.Format(ErrMsg.BrickWithThatIdHasAllParts, y, id);
+                throw new ArgumentException(errMsg);
             }
 
             if (checkedBrick.Parts.Count == GeneralConstants.MinBrickParts)
@@ -179,21 +173,24 @@ namespace Brickwork.Common.Validations
 
                 if (!canProceed)
                 {
-                    return string.Format(ErrMsg.BrickPartWrongPosition, id, y);
+                    var errMsg = string.Format(ErrMsg.BrickPartWrongPosition, id, y);
+                    throw new ArgumentException(errMsg);
                 }
 
                 if (existingPart.Y == y && existingPart.X + 1 != x && checkedBrick.Id != id)
                 {
-                    return string.Format(ErrMsg.BrickPartAboveMustMatch, id, y, checkedBrick.Id);
+                    var errMsg = string.Format(ErrMsg.BrickPartAboveMustMatch, id, y, checkedBrick.Id);
+                    throw new ArgumentException(errMsg);
                 }
 
                 if (existingPart.X == x && existingPart.Y + 1 != y && checkedBrick.Id != id)
                 {
-                    return string.Format(ErrMsg.BrickPartWrongPositionSameRow, y, checkedBrick.Id);
+                    var errMsg = string.Format(ErrMsg.BrickPartWrongPositionSameRow, y, id);
+                    throw new ArgumentException(errMsg);
                 }
             }
 
-            return null;
+            return true;
         }
 
         /// <summary>

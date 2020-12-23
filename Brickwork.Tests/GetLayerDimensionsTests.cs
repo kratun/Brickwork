@@ -12,7 +12,7 @@ namespace Brickwork.Tests
     public class GetLayerDimensionsTests
     {
         [Fact]
-        public void GetLayerDimensionsWorks()
+        public void Works()
         {
             var validRowsNumber = 2;
             var validColsNumber = 4;
@@ -28,7 +28,7 @@ namespace Brickwork.Tests
         }
 
         [Fact]
-        public void GetLayerDimensionsReturnArgumentExceptionNotEnterColums()
+        public void ReturnArgumentExceptionNotEnterColums()
         {
             var validRowsNumber = 4;
 
@@ -47,7 +47,7 @@ namespace Brickwork.Tests
         }
 
         [Fact]
-        public void GetLayerDimensionsReturnArgumentExceptionNotEnterRows()
+        public void ReturnArgumentExceptionNotEnterRows()
         {
             var validColsNumber = 4;
 
@@ -66,7 +66,7 @@ namespace Brickwork.Tests
         }
 
         [Fact]
-        public void GetLayerDimensionsReturnArgumentExceptionEnterNotInteger()
+        public void ReturnArgumentExceptionEnterNotInteger()
         {
             var validRowsNumber = "NotInteger";
             var validColsNumber = 4;
@@ -86,7 +86,7 @@ namespace Brickwork.Tests
         }
 
         [Fact]
-        public void GetLayerDimensionsReturnArgumentExceptionWrongRows()
+        public void ReturnArgumentExceptionWrongRows()
         {
             var validRowsNumber = 3;
             var validColsNumber = 4;
@@ -106,7 +106,7 @@ namespace Brickwork.Tests
         }
 
         [Fact]
-        public void GetLayerDimensionsArgumentOutOfRangeExceptionIfRowBelowMin()
+        public void ReturnArgumentOutOfRangeExceptionIfRowBelowMin()
         {
             var validRowsNumber = 0;
             var validColsNumber = 4;

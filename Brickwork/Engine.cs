@@ -153,7 +153,6 @@ namespace Brickwork
                     else if (inputArgsStr.ToLower() == GeneralConstants.RepeatProcess)
                     {
                         i = GeneralConstants.StartPositionIndex;
-
                         inputArgsStr = $"{layerRows} {layerColumns}";
                         this.LayerService.GetLayerDimensions(inputArgsStr);
 

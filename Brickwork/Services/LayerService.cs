@@ -58,6 +58,7 @@ namespace Brickwork.Services
         /// <exception cref="ArgumentOutOfRangeException">Thrown when X (width) or Y (heght) are out of game range.</exception>
         public bool GetLayerDimensions(string inputArgsStr)
         {
+            this.Reset();
             var result = this.TryGetPoint(inputArgsStr);
             this.Layer = new Layer(result.X, result.Y);
             return true;
